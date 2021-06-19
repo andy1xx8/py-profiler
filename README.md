@@ -20,6 +20,8 @@ def hello():
 
 ## Access Profiler
 
+- Exec time is in milliseconds
+
 1. **View as a table**
 
 ```python
