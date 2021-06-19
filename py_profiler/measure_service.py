@@ -1,5 +1,7 @@
 import threading
 
+from beautifultable import BeautifulTable
+
 from py_profiler.long_adder import LongAdder
 
 
@@ -79,10 +81,10 @@ class MeasureService:
     def get_reports(self) -> list:
         pass
 
-    def get_report_as_html(self) -> str:
+    def as_html(self) -> str:
         pass
 
-    def as_table(self):
+    def as_table(self) -> str:
         pass
 
 
@@ -121,12 +123,45 @@ class AccumulativeMeasureService(MeasureService):
         values.sort(key=get_sortable_key)
         return values
 
-    def get_report_as_html(self) -> str:
+    def as_html(self) -> str:
         reports = self.get_reports()
         return self._template.render(reports=reports)
 
     def as_table(self):
-        return ''
+        table = BeautifulTable()
+        table.columns.header = [
+            "No",
+            "Name",
+            "Total Req",
+            "Pending Req",
+            "Total Exec Time",
+            "Last Exec Time",
+            "Highest Exec Time",
+            "Request Rate (req/sec)",
+            "Avg Time/Request (millis/request)",
+        ]
+        table.columns.alignment['Name'] = BeautifulTable.ALIGN_LEFT
+
+        table.columns.width = 12
+        table.columns.width["No"] = 4
+        table.columns.width["Total Req"] = 8
+        table.columns.width["Pending Req"] = 10
+        table.columns.width["Name"] = 32
+
+        for i, report in enumerate(self.get_reports()):
+            table.rows.append([
+                i + 1,
+                report.func_name,
+                report.total_hits.get_value(),
+                report.current_pending_hits.get_value(),
+                report.total_duration_as_ms(),
+                report.last_duration_as_ms(),
+                report.highest_duration_as_ms(),
+                report.get_request_rate(),
+                report.get_avg_time_per_request()
+            ])
+        table.set_style(BeautifulTable.STYLE_MARKDOWN)
+        return str(table)
 
 
 profiling_service = AccumulativeMeasureService()

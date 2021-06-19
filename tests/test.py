@@ -1,12 +1,14 @@
 from flask import Flask
 from waitress import serve
 
-from py_profiler import profiler
+from py_profiler import profiler, profiling_service
 from py_profiler import profiler_blueprint
+
 
 @profiler('hello')
 def hello():
     print('hello')
+
 
 def setup_blueprints(
         port: int = 8080,
@@ -35,6 +37,5 @@ if __name__ == "__main__":
     hello()
     hello()
     hello()
+    print(profiling_service.as_table())
     setup_blueprints()
-
-

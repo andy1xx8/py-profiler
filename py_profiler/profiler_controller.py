@@ -9,4 +9,4 @@ profiler_blueprint = Blueprint("profiler", __name__)
 
 @profiler_blueprint.route("/profiler", methods=["GET"])
 def index():
-    return profiling_service.get_report_as_html()
+    return profiling_service.as_html()
