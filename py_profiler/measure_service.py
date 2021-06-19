@@ -6,7 +6,7 @@ from py_profiler.long_adder import LongAdder
 
 
 #
-# @author: anhlt
+# @author: andy
 #
 class MeasureValue:
     def __init__(self, func_name: str):
@@ -160,7 +160,6 @@ class AccumulativeMeasureService(MeasureService):
                 report.get_request_rate(),
                 report.get_avg_time_per_request()
             ])
-        table.set_style(BeautifulTable.STYLE_MARKDOWN)
         return str(table)
 
 

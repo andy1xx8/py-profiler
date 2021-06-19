@@ -20,7 +20,7 @@ def hello():
 
 ## Access Profiler
 
-1. View as a table
+1. **View as a table**
 
 ```python
 from py_profiler.measure_service import profiling_service
@@ -28,15 +28,12 @@ from py_profiler.measure_service import profiling_service
 print(profiling_service.as_table())
 ```
 
-| No | Name                           | Total  | Pending  | Total Exec | Last Exec  | Highest Ex | Request Ra | Avg Time/R |
-|    |                                |  Req   |   Req    |    Time    |    Time    |  ec Time   | te (req/se | equest (mi |
-|    |                                |        |          |            |            |            |     c)     | llis/reque |
-|    |                                |        |          |            |            |            |            |    st)     |
+| No | Name                           | Total Req  | Pending Req  | Total Exec Time | Last Exec Time  | Highest Exec Time | Request Rate (req/sec) | Avg Time/Request (millis/req) |
 |----|--------------------------------|--------|----------|------------|------------|------------|------------|------------|
 | 1  | hello                          |   4    |    0     |   0.046    |   0.005    |   0.029    | 86956.522  |   0.011    |
 
 
-2. Intergrate with Flask
+2. **Integrate with Flask**
 
 - If you are using Flask to implement your Restful API. You can add `profiler_blueprint` to your Flash app.
 
@@ -58,4 +55,4 @@ serve(
 ```
 
 Then you can access the profiler page at: `http://127.0.0.1:8080/profiler`
-![Py Profiler Page](sample.png)
+![Py Profiler Page](https://github.com/andy1xx8/py-profiler/blob/master/sample.png?raw=true)

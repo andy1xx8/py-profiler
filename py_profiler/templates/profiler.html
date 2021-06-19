@@ -78,30 +78,30 @@
     <tr style="background-color: paleturquoise">
         <th>No</th>
         <th>Name</th>
-        <th>TotalReq</th>
-        <th>PendingReq</th>
-        <th>TotalTmReq
-            <br>(milisecs)
+        <th>Total Req</th>
+        <th>Pending Req</th>
+        <th>Total Exec Time
+            <br>(millis)
         </th>
-        <th>LastTmReq
-            <br>(milisecs)
+        <th>Last Exec Time
+            <br>(millis)
         </th>
-        <th>HighestTmReq
-            <br>(milisecs)
+        <th>Highest Exec Time
+            <br>(millis)
         </th>
 
         <th>Request Rate
-            <br>(req/second)
+            <br>(req/sec)
         </th>
-        <th>Time Rate
-            <br>(milisecs/req)
+        <th>Avg Time/Request
+            <br>(millis/req)
         </th>
     </tr>
     </thead>
     <tbody style="text-align: right">
     {% for report in reports %}
     <tr>
-        <td style="text-align: center"></td>
+        <td style="text-align: center">{{loop.index}}</td>
         <td style="text-align: left">
             <div class="inner">
                 {{report.func_name}}

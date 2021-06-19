@@ -1,6 +1,8 @@
 import threading
 
-
+#
+# @author andy
+#
 class LongAdder:
     def __init__(self):
         self._lock = threading.Lock()
