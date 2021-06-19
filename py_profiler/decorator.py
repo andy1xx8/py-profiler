@@ -1,0 +1,31 @@
+import time
+
+#
+# @author: anhlt
+#
+from py_profiler.measure_service import profiling_service
+
+
+def profiler(name=None):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            if name is None:
+                try:
+                    function_name = func.__func__.__qualname__
+                except:
+                    function_name = func.__qualname__
+            else:
+                function_name = name
+            begin_time = time.time_ns()
+            profiling_service.start_measure(function_name)
+            try:
+                return func(*args, **kwargs)
+            finally:
+                profiling_service.stop_measure(
+                    function_name,
+                    time.time_ns() - begin_time
+                )
+
+        return wrapper
+
+    return decorator
