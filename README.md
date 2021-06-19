@@ -13,7 +13,7 @@ E.g:
 from py_profiler import profiler
 
 
-@profiler('hello_execution_measurement')
+@profiler('hello')
 def hello():
     print('hello')
 ```
