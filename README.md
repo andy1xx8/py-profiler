@@ -1,6 +1,10 @@
 # PY Profiler
 
-A library to measure your method, function execution time.
+A library to measure method, function or your restful api execution time.
+
+## Install
+
+- Run `pip install py-profiler` or `pip3 install py-profiler` to install this library
 
 ## Usage
 
@@ -10,7 +14,7 @@ to measure its execution time.
 E.g:
 
 ```python
-from src.py_profiler import profiler
+from py_profiler import profiler
 
 
 @profiler('hello')
@@ -33,7 +37,6 @@ print(profiling_service.as_table())
 | No | Name                           | Total Req  | Pending Req  | Total Exec Time | Last Exec Time  | Highest Exec Time | Request Rate (req/sec) | Avg Time/Request (millis/req) |
 |----|--------------------------------|--------|----------|------------|------------|------------|------------|------------|
 | 1  | hello                          |   4    |    0     |   0.046    |   0.005    |   0.029    | 86956.522  |   0.011    |
-
 
 2. **Integrate with Flask**
 
