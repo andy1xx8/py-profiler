@@ -1,3 +1,0 @@
-from py_profiler.decorator import profiler
-from py_profiler.measure_service import profiling_service
-from py_profiler.profiler_controller import profiler_blueprint

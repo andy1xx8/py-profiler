@@ -2,7 +2,7 @@ import threading
 
 from beautifultable import BeautifulTable
 
-from py_profiler.long_adder import LongAdder
+from .long_adder import LongAdder
 
 
 #

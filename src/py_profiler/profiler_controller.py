@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template
+from flask import Blueprint
 
 #
 # @author: andy
 #
-from py_profiler.measure_service import profiling_service
+from .measure_service import profiling_service
 
 profiler_blueprint = Blueprint("profiler", __name__)
 

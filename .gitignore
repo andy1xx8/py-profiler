@@ -13,3 +13,4 @@ build
 target
 py_profiler.egg-info
 *.iml
+.pypirc

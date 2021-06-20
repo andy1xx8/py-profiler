@@ -3,7 +3,7 @@ import time
 #
 # @author: andy
 #
-from py_profiler.measure_service import profiling_service
+from .measure_service import profiling_service
 
 #
 # @author andy
