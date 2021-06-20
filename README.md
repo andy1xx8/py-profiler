@@ -25,7 +25,7 @@ def hello():
 1. **View as a table**
 
 ```python
-from src.py_profiler import profiling_service
+from py_profiler import profiling_service
 
 print(profiling_service.as_table())
 ```
@@ -44,7 +44,7 @@ E.g:
 ```python
 from flask import Flask
 from waitress import serve
-from src.py_profiler import profiler_blueprint
+from py_profiler import profiler_blueprint
 
 app = Flask(__name__)
 app.register_blueprint(profiler_blueprint)
