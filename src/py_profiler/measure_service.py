@@ -8,6 +8,14 @@ from .long_adder import LongAdder
 #
 # @author: andy
 #
+
+def _load_template():
+    import pkgutil
+    data = pkgutil.get_data(__name__, "templates/profiler.html").decode("utf-8")
+    from jinja2 import Template
+    return Template(data)
+
+
 class MeasureValue:
     def __init__(self, func_name: str):
         self._lock = threading.Lock()
@@ -65,19 +73,15 @@ class MeasureValue:
 
 class MeasureService:
 
-    @classmethod
     def get_measure_value(self, func_name: str) -> MeasureValue:
         pass
 
-    @classmethod
     def start_measure(self, func_name: str) -> None:
         pass
 
-    @classmethod
     def stop_measure(self, func_name: str, duration_ns: int) -> None:
         pass
 
-    @classmethod
     def get_reports(self) -> list:
         pass
 
@@ -86,13 +90,6 @@ class MeasureService:
 
     def as_table(self) -> str:
         pass
-
-
-def _load_template():
-    import pkgutil
-    data = pkgutil.get_data(__name__, "templates/profiler.html").decode("utf-8")
-    from jinja2 import Template
-    return Template(data)
 
 
 class AccumulativeMeasureService(MeasureService):
