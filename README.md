@@ -33,16 +33,6 @@ class Foo:
     def method_2(self):
         print('method_2')
 
-
-if __name__ == "__main__":
-    foo = Foo()
-
-    hello()
-    foo.some_thing()
-    foo.method_2()
-
-    print(profiling_service.as_table())
-
 ```
 
 ## Access Profiler
