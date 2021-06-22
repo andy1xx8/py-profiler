@@ -25,7 +25,7 @@ def profiler(name=None):
             finally:
                 profiling_service.stop_measure(
                     function_name,
-                    time.time_ns() - begin_time
+                    time.time() * 1000_000_000 - begin_time
                 )
 
         return wrapper
