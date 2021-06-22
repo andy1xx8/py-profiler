@@ -1,4 +1,5 @@
 import time
+
 from .measure_service import profiling_service
 
 
@@ -15,7 +16,9 @@ def profiler(name=None):
                     function_name = func.__qualname__
             else:
                 function_name = name
-            begin_time = time.time_ns()
+
+            # begin_time = time.time_ns()
+            begin_time = time.time() * 1000_000_000
             profiling_service.start_measure(function_name)
             try:
                 return func(*args, **kwargs)
@@ -28,5 +31,3 @@ def profiler(name=None):
         return wrapper
 
     return decorator
-
-
