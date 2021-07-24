@@ -62,7 +62,7 @@ E.g:
 ```python
 from flask import Flask
 from waitress import serve
-from py_profiler import profiler_blueprint
+from py_profiler.profiler_controller import profiler_blueprint
 
 app = Flask(__name__)
 app.register_blueprint(profiler_blueprint)

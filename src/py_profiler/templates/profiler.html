@@ -69,6 +69,7 @@
             min-width: 100%;
             text-align: center !important;
         }
+
     </style>
 </head>
 
@@ -118,6 +119,18 @@
 
     </tr>
     {% endfor %}
+    <tr>
+        <td style="text-align: center"><b>Up Time</b></td>
+        <td style="text-align: left" colspan="8">
+            {{uptime}}
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center"><b>Start At</b></td>
+        <td style="text-align: left" colspan="8">
+            {{start_at}}
+        </td>
+    </tr>
     </tbody>
 </table>
 

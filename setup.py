@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="py_profiler",
-    version="0.2.0",
+    version="0.2.1",
     author="Andy Le",
     author_email="tauit.dnmd@gmail.com",
     description="A library to measure your method, function execution time.",
@@ -20,13 +20,9 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
+    package_dir={"": "src"},
     include_package_data=True,
-    package_data={
-        # If any package contains *.txt files, include them:
-        "": ["*.txt"],
-        "py_profiler": ["templates/*.html"],
-    },
     python_requires=">=3.6",
+    install_requires=["jinja2", "beautifultable"]
 )

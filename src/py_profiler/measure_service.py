@@ -1,4 +1,6 @@
+import datetime
 import threading
+import time
 
 from beautifultable import BeautifulTable
 
@@ -14,6 +16,22 @@ def _load_template():
     data = pkgutil.get_data(__name__, "templates/profiler.html").decode("utf-8")
     from jinja2 import Template
     return Template(data)
+
+
+def pretty_time_delta(seconds):
+    sign_string = '-' if seconds < 0 else ''
+    seconds = abs(int(seconds))
+    days, seconds = divmod(seconds, 86400)
+    hours, seconds = divmod(seconds, 3600)
+    minutes, seconds = divmod(seconds, 60)
+    if days > 0:
+        return '%s%dd%dh%dm%ds' % (sign_string, days, hours, minutes, seconds)
+    elif hours > 0:
+        return '%s%dh%dm%ds' % (sign_string, hours, minutes, seconds)
+    elif minutes > 0:
+        return '%s%dm%ds' % (sign_string, minutes, seconds)
+    else:
+        return '%s%ds' % (sign_string, seconds)
 
 
 class MeasureValue:
@@ -82,6 +100,9 @@ class MeasureService:
     def stop_measure(self, func_name: str, duration_ns: int) -> None:
         pass
 
+    def get_uptime(self) -> int:
+        pass
+
     def get_reports(self) -> list:
         pass
 
@@ -98,6 +119,7 @@ class AccumulativeMeasureService(MeasureService):
         self._lock = threading.Lock()
         self._measure_map = dict()
         self._template = _load_template()
+        self.start_at = time.time() * 1000
         print(f'AccumulativeMeasureService called {__name__}')
 
     def get_measure_value(self, func_name: str) -> MeasureValue:
@@ -112,6 +134,9 @@ class AccumulativeMeasureService(MeasureService):
     def stop_measure(self, func_name: str, duration_ns: int) -> None:
         self.get_measure_value(func_name).stop(duration_ns)
 
+    def get_uptime(self) -> int:
+        return int(time.time() * 1000) - int(self.start_at)
+
     def get_reports(self) -> list:
         def get_sortable_key(measure_value: MeasureValue):
             return measure_value.func_name
@@ -122,7 +147,13 @@ class AccumulativeMeasureService(MeasureService):
 
     def as_html(self) -> str:
         reports = self.get_reports()
-        return self._template.render(reports=reports)
+        uptime_str = pretty_time_delta(int(self.get_uptime() / 1000))
+        start_at_str = datetime.datetime.fromtimestamp(int(self.start_at / 1000)).strftime("%Y-%m-%d %H:%M:%S")
+        return self._template.render(
+            reports=reports,
+            uptime=uptime_str,
+            start_at=start_at_str
+        )
 
     def as_table(self):
         table = BeautifulTable()
