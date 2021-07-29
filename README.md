@@ -38,8 +38,11 @@ class Foo:
 ## Access Profiler
 
 There are 3 ways to access the profiler:
+
     - View as a raw table in the console.
+    
     - View as a HTML page using a provided Flask blueprint.
+    
     - Integrate with your own RESTFul framework.
 
 - Exec time is in milliseconds
