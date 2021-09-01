@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="py_profiler",
-    version="0.2.1",
+    version="0.2.3",
     author="Andy Le",
     author_email="tauit.dnmd@gmail.com",
     description="A library to measure your method, function execution time.",

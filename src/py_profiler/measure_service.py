@@ -4,34 +4,12 @@ import time
 
 from beautifultable import BeautifulTable
 
+from . import utils
 from .long_adder import LongAdder
-
-
 #
 # @author: andy
 #
-
-def _load_template():
-    import pkgutil
-    data = pkgutil.get_data(__name__, "templates/profiler.html").decode("utf-8")
-    from jinja2 import Template
-    return Template(data)
-
-
-def pretty_time_delta(seconds):
-    sign_string = '-' if seconds < 0 else ''
-    seconds = abs(int(seconds))
-    days, seconds = divmod(seconds, 86400)
-    hours, seconds = divmod(seconds, 3600)
-    minutes, seconds = divmod(seconds, 60)
-    if days > 0:
-        return '%s%dd%dh%dm%ds' % (sign_string, days, hours, minutes, seconds)
-    elif hours > 0:
-        return '%s%dh%dm%ds' % (sign_string, hours, minutes, seconds)
-    elif minutes > 0:
-        return '%s%dm%ds' % (sign_string, minutes, seconds)
-    else:
-        return '%s%ds' % (sign_string, seconds)
+from .utils import load_jinja2_template
 
 
 class MeasureValue:
@@ -40,6 +18,7 @@ class MeasureValue:
 
         self.func_name = func_name
         self.total_hits = LongAdder()
+        self.current_error_hits = LongAdder()
         self.current_pending_hits = LongAdder()
 
         self.total_duration_ns = LongAdder()
@@ -53,8 +32,12 @@ class MeasureValue:
         self.current_pending_hits.increment()
         self.total_hits.increment()
 
-    def stop(self, duration_ns: int):
+    def stop(self, duration_ns: int, is_error: bool = False):
+        if is_error:
+            self.current_error_hits.increment()
+
         self.current_pending_hits.decrement()
+
         self.total_duration_ns.set(duration_ns)
         with self._lock:
             self.last_duration_ns = duration_ns
@@ -97,7 +80,7 @@ class MeasureService:
     def start_measure(self, func_name: str) -> None:
         pass
 
-    def stop_measure(self, func_name: str, duration_ns: int) -> None:
+    def stop_measure(self, func_name: str, duration_ns: int, is_error: bool = False) -> None:
         pass
 
     def get_uptime(self) -> int:
@@ -118,7 +101,7 @@ class AccumulativeMeasureService(MeasureService):
     def __init__(self):
         self._lock = threading.Lock()
         self._measure_map = dict()
-        self._template = _load_template()
+        self._template = load_jinja2_template("templates/profiler.html")
         self.start_at = time.time() * 1000
         print(f'AccumulativeMeasureService called {__name__}')
 
@@ -131,8 +114,8 @@ class AccumulativeMeasureService(MeasureService):
     def start_measure(self, func_name: str) -> None:
         self.get_measure_value(func_name).start()
 
-    def stop_measure(self, func_name: str, duration_ns: int) -> None:
-        self.get_measure_value(func_name).stop(duration_ns)
+    def stop_measure(self, func_name: str, duration_ns: int, is_error: bool = False) -> None:
+        self.get_measure_value(func_name).stop(duration_ns, is_error)
 
     def get_uptime(self) -> int:
         return int(time.time() * 1000) - int(self.start_at)
@@ -147,7 +130,7 @@ class AccumulativeMeasureService(MeasureService):
 
     def as_html(self) -> str:
         reports = self.get_reports()
-        uptime_str = pretty_time_delta(int(self.get_uptime() / 1000))
+        uptime_str = utils.pretty_time_delta(int(self.get_uptime() / 1000))
         start_at_str = datetime.datetime.fromtimestamp(int(self.start_at / 1000)).strftime("%Y-%m-%d %H:%M:%S")
         return self._template.render(
             reports=reports,
@@ -162,6 +145,7 @@ class AccumulativeMeasureService(MeasureService):
             "Name",
             "Total Req",
             "Pending Req",
+            "Error Req",
             "Total Exec Time",
             "Last Exec Time",
             "Highest Exec Time",
@@ -182,6 +166,7 @@ class AccumulativeMeasureService(MeasureService):
                 report.func_name,
                 report.total_hits.get_value(),
                 report.current_pending_hits.get_value(),
+                report.current_error_hits.get_value(),
                 report.total_duration_as_ms(),
                 report.last_duration_as_ms(),
                 report.highest_duration_as_ms(),
@@ -190,5 +175,5 @@ class AccumulativeMeasureService(MeasureService):
             ])
         return str(table)
 
-
+# Create
 profiling_service = AccumulativeMeasureService()

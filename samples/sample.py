@@ -15,13 +15,16 @@ class Foo:
     @profiler()
     def method_2(self):
         print('method_2')
+        raise Exception('aaaa')
 
 
 if __name__ == "__main__":
-    foo = Foo()
-
-    hello()
-    foo.some_thing()
-    foo.method_2()
-
-    print(profiling_service.as_table())
+    try:
+        foo = Foo()
+        hello()
+        foo.some_thing()
+        foo.method_2()
+    except Exception as e:
+        pass
+    finally:
+        print(profiling_service.as_table())
